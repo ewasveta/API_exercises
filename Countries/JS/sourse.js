@@ -30,6 +30,7 @@ async function setup(personName)
 
     const tbody = document.querySelector("#preview")  
    
+    tbody.innerHTML = ""
     lands.forEach( c => 
     {
         let objC = new Country(c.country_id, Math.round(c.probability*100), c.country_id, 
