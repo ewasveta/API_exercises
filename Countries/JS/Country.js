@@ -1,5 +1,5 @@
 class Country
-{//l.country_id, l.probability
+{
     constructor(code, chance, oName=0, flagUrl=0, flagAlt=0)
     {
         this.code = code

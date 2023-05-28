@@ -1,4 +1,12 @@
-
+const offName = 
+[
+    {"code": "US", "official": "United States of America"},
+    {"code": "JP", "official": "Japan"},
+    {"code": "AO", "official": "Angola"},
+    {"code": "UA", "official": "Ukraine"},
+    {"code": "IL", "official": "Israel"},
+    {"code": "RU", "official": "Russian Federation"}
+]
 
 async function getChances(personName)
 {
@@ -24,8 +32,15 @@ async function setup(personName)
    
     lands.forEach( c => 
     {
-        let objC = new Country(c.country_id, c.probability, c.country_id, 
+        let objC = new Country(c.country_id, Math.round(c.probability*100), c.country_id, 
         `https://flagsapi.com/${c.country_id}/flat/64.png`, `${c.country_id} flag`)
+
+        let o = offName.find(l => l.code == objC.code);
+        let cN = o ? o.official : c.country_id
+
+        console.log(`official name : ${o}`)
+
+        objC.officialName = cN
 
         tbody.innerHTML += objC.createRow();
     });     
