@@ -1,12 +1,12 @@
-const offName = 
-[
-    {"code": "US", "official": "United States of America"},
-    {"code": "JP", "official": "Japan"},
-    {"code": "AO", "official": "Angola"},
-    {"code": "UA", "official": "Ukraine"},
-    {"code": "IL", "official": "Israel"},
-    {"code": "RU", "official": "Russian Federation"}
-]
+// const offName = 
+// [
+//     {"code": "US", "official": "United States of America"},
+//     {"code": "JP", "official": "Japan"},
+//     {"code": "AO", "official": "Angola"},
+//     {"code": "UA", "official": "Ukraine"},
+//     {"code": "IL", "official": "Israel"},
+//     {"code": "RU", "official": "Russian Federation"}
+// ]
 
 async function getChances(personName)
 {
@@ -24,6 +24,8 @@ async function getChances(personName)
     }
 }
 
+//import { officialNames } from "./countriesCodes.js";/
+
 async function setup(personName) 
 {
     const lands = await getChances(personName)
@@ -33,15 +35,13 @@ async function setup(personName)
     tbody.innerHTML = ""
     lands.forEach( c => 
     {
-        let objC = new Country(c.country_id, Math.round(c.probability*100), c.country_id, 
+        let objC = new Country(c.country_id, Math.round(c.probability*100), '', 
         `https://flagsapi.com/${c.country_id}/flat/64.png`, `${c.country_id} flag`)
 
-        let o = offName.find(l => l.code == objC.code);
-        let cN = o ? o.official : c.country_id
+        let o = officialNames.find(l => l.code == objC.code)?.official;   
+        //console.log(`official name : ${o}`)
 
-        console.log(`official name : ${o}`)
-
-        objC.officialName = cN
+        objC.officialName = o
 
         tbody.innerHTML += objC.createRow();
     });     
