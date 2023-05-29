@@ -1,5 +1,4 @@
-// export 
-const officialNames =
+export const officialNames =
 [
 	{"official": "Andorra", "code": "AD"},
 	{"official": "United Arab Emirates", "code": "AE"},
@@ -124,18 +123,18 @@ const officialNames =
 	{"official": "Kiribati", "code": "KI"},
 	{"official": "Comoros", "code": "KM"},
 	{"official": "Saint Kitts and Nevis", "code": "KN"},
-	{"official": "Lebanon", "code": "LB"},
 	{"official": "Korea", "code": "LT"},
 	{"official": "Luxembourg", "code": "LU"},
 	{"official": "Latvia", "code": "LV"},
 	{"official": "Libya", "code": "LY"},
 	{"official": "Morocco", "code": "MA"},
 	{"official": "Monaco", "code": "MC"},
-	{"official": "Moldova", "code": "MD"},
+	{"official": "Moldova, Republic of", "code": "MD"},
 	{"official": "Montenegro", "code": "ME"},
 	{"official": "Saint Martin", "code": "MF"},
 	{"official": "Madagascar", "code": "MG"},
 	{"official": "Marshall Islands", "code": "MH"},
+	{"official": "deleted", "code": " Midway Islands; unassigned" style="background", "code": " ", "code": " class="partial table-partial"MI"},
 	{"official": "North Macedonia", "code": "MK"},
 	{"official": "Mali", "code": "ML"},
 	{"official": "Myanmar", "code": "MM"},
