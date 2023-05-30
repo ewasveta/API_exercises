@@ -16,7 +16,7 @@ class Country
                     <th scope="row">${this.code}</th>
                     <td>${this.officialName}</td>
                     <td>${this.probability}</td>
-                    <td><img src="${this.flagUrl}" alt="${this.flagAlt}"</td>
+                    <td><img src="${this.flagUrl}" alt="${this.flagAlt}"></td>
                 </tr>`
     }
 }
