@@ -23,7 +23,8 @@ async function setup()
     posts.forEach(async p => 
     {
         const objP =  new Post(p.id, p.title, p.body, p.userId)
-        objP.link = `http://127.0.0.1:5500/comments.html?postId=${p.id}`    
+        objP.link = `https://ewasveta.github.io/API_exercises/Posts/comments.html?postId=${p.id}`
+        //`http://127.0.0.1:5500/comments.html?postId=${p.id}`    
         
         grid.innerHTML += objP.createRow();
     });    
