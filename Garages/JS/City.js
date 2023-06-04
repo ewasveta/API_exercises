@@ -9,19 +9,44 @@ class City
         this.shem_moaatza = councilName
     }
 
-    createRow()
-    {        
-        return `<tr>
-                    <th scope="row">${this.semel_yeshuv}</th>
-                    <td>${this.name}</td>
-                    <td>${this.english_name}</td>
-                    <td>${this.shem_napa}</td>
-                    <td>${this.shem_moaatza}</td>
-                    <td>
+    createRow(grg)
+    {  
+        let tr =  `<tr>
+        <th scope="row">${this.semel_yeshuv}</th>
+        <td>${this.name}</td>
+        <td>${this.english_name}</td>
+        <td>${this.shem_napa}</td>
+        <td>${this.shem_moaatza}</td>`
+
+        let add = ''
+        if(grg == 1)
+        {
+            add  = `<td>
                         <button onclick="toGarages('${this.name}')">
                             <i class="fa-solid fa-eye" style="color:carob;"></i>
                         </button>
                     </td>
-                </tr>`
+                </tr> `
+        }
+        else
+        {
+            add  = `<td></td></tr>`
+        }
+        
+        return tr + add
+
+
+        // return `<tr>
+        //             <th scope="row">${this.semel_yeshuv}</th>
+        //             <td>${this.name}</td>
+        //             <td>${this.english_name}</td>
+        //             <td>${this.shem_napa}</td>
+        //             <td>${this.shem_moaatza}</td>
+        //             <td>
+        //                 <button onclick="toGarages('${this.name}')">
+        //                     <i class="fa-solid fa-eye" style="color:carob;"></i>
+        //                 </button>
+        //             </td>
+        //         </tr>`
     }
 }

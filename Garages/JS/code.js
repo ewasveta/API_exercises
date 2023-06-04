@@ -1,6 +1,7 @@
 //https://raw.githubusercontent.com/royts/israel-cities/master/israel-cities.json
 
 let cities = null;
+let garages = null;
 let range = 30;
 const tbody = document.querySelector("#preview");
 
@@ -21,9 +22,28 @@ async function getCities()
 }
 //getCities()
 
+async function getGarages()
+{
+    try 
+    {
+        const res = 
+            await fetch('https://data.gov.il/api/action/datastore_search?resource_id=bb68386a-a331-4bbc-b668-bba2766d517d&limit=1000')
+        const data = await res.json()
+        return data.result.records 
+        //console.log(data.result.records)
+    } 
+    catch (error) 
+    {
+        console.log("Error cities resource fetching ",error)
+    }
+}
+//getGarages()
+
 
 async function setup() 
 {
+    garages = await getGarages()
+
     cities = await getCities()
     if(cities)
     {
@@ -39,8 +59,10 @@ async function setup()
                 new City(cities[i].semel_yeshuv, cities[i].name,
                     cities[i].english_name, cities[i].shem_napa,
                     cities[i].shem_moaatza);
-                    
-            tbody.innerHTML += objC.createRow();
+
+            const found = garages.find(g => g.yishuv==cities[i].name)
+                  
+            tbody.innerHTML += (found) ? objC.createRow(1) : objC.createRow(0);
         }
 
         for(let j=1; j<=parts; j++)
@@ -72,7 +94,9 @@ function fillPart(No)
                 cities[i].english_name, cities[i].shem_napa,
                 cities[i].shem_moaatza);
                 
-        tbody.innerHTML += objC.createRow();
+        const found = garages.find(g => g.yishuv==cities[i].name)
+            
+        tbody.innerHTML += (found) ? objC.createRow(1) : objC.createRow(0);
     }
 }
 
