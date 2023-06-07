@@ -11,22 +11,24 @@ class City
 
     createRow(grg)
     {  
-        let tr =  `<tr>
-        <th scope="row">${this.semel_yeshuv}</th>
-        <td>${this.name}</td>
-        <td>${this.english_name}</td>
-        <td>${this.shem_napa}</td>
-        <td>${this.shem_moaatza}</td>`
+        let tr =  
+        `<tr>
+            <th scope="row">${this.semel_yeshuv}</th>
+            <td>${this.name}</td>
+            <td>${this.english_name}</td>
+            <td>${this.shem_napa}</td>
+            <td>${this.shem_moaatza}</td>`
 
         let add = ''
-        if(grg == 1)
+        if(grg)
         {
-            add  = `<td>
-                        <button onclick="toGarages('${this.name}')">
-                            <i class="fa-solid fa-eye" style="color:carob;"></i>
-                        </button>
-                    </td>
-                </tr> `
+            add  = 
+                `<td>
+                    <button onclick="toGarages(${grg})" style="border:0;">
+                        <i class="fa-solid fa-eye" style="color:carob;"></i>
+                    </button>
+                </td>
+            </tr> `
         }
         else
         {
