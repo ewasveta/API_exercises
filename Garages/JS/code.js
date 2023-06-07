@@ -21,7 +21,7 @@ async function getCities()
     } 
     catch (error) 
     {
-        console.log("Error cities resource fetching ",error)
+        console.error("Error cities resource fetching ",error)
     }
 }
 //getCities()
@@ -38,7 +38,7 @@ async function getGarages()
     } 
     catch (error) 
     {
-        console.error("Error cities resource fetching ",error)
+        console.error("Error garages resource fetching ",error)
     }
 }
 //getGarages()
@@ -73,7 +73,7 @@ async function setup()
                 item[i] = available;            
                 
                 found.push(item)
-                console.log(found)
+                //console.log(found)
             }
                             
             tbody.innerHTML += (available.length) ? objC.createRow(i) : objC.createRow(0); 
@@ -99,7 +99,7 @@ function fillPart(No)
     let start = (No-1)*range
     let fin = Math.min((start+range), cities.length)
 
-    console.log(`start=${start}, fin=${fin}`)
+    //console.log(`start=${start}, fin=${fin}`)
 
     tbody.innerHTML = ""
     
@@ -119,7 +119,7 @@ function fillPart(No)
                     item[i] = available;            
                     
                     found.push(item)
-                    console.log(found)
+                    //console.log(found)
                 }
                                 
                 tbody.innerHTML += (available.length) ? objC.createRow(i) : objC.createRow(0); 
@@ -150,8 +150,6 @@ function toGarages(keyGrgs)
 
             ul.innerHTML += objG.createRow();       
     });
-
-    // window.location.href = `http://127.0.0.1:5501/garages.html?city=${cityName}` 
 }
 
 function details(id)
@@ -164,7 +162,7 @@ function details(id)
         theGrg = f[key].find(g=>g._id==id)
         if(theGrg) break;
     }
-    console.log(theGrg)
+    //console.log(theGrg)
 
     document.querySelector('#modalLabel').innerText = 
     `מוסך: ${theGrg.shem_mosah}, מס': ${theGrg.mispar_mosah}`
