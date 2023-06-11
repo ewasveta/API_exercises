@@ -223,7 +223,7 @@ function search()
             {
                 available.forEach(g => sole.push(g))
             }
-            console.log(sole)   
+            //console.log(sole)   
             
             tbody.innerHTML += (available.length) ? 
                 allCities.getCity(index).createRow(index,1) : 
