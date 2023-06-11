@@ -18,10 +18,10 @@ class Garage
         this.menahel_miktzoa = menahel_miktzoa
         this.rasham_havarot = rasham_havarot
     }
-    createRow()
+    createRow(n)
     {
         return `<li class="list-group-item p-2">
-                    <button onclick="details(${this.id})" data-bs-toggle="modal" data-bs-target="#exampleModal">  
+                    <button onclick="details(${this.id}, ${n})" data-bs-toggle="modal" data-bs-target="#exampleModal" style="border:0;">  
                         <i class="fa-solid fa-eye" style="color:carob;"></i>
                     </button>    
                     ${this.shem_mosah}:  ${this.miktzoa}

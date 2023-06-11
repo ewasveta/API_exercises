@@ -9,7 +9,7 @@ class City
         this.shem_moaatza = councilName
     }
 
-    createRow(grg)
+    createRow(grg, n)
     {  
         let tr =  
         `<tr>
@@ -24,7 +24,7 @@ class City
         {
             add  = 
                 `<td>
-                    <button onclick="toGarages(${grg})" style="border:0;">
+                    <button onclick="toGarages(${grg}, ${n})" style="border:0;">
                         <i class="fa-solid fa-eye" style="color:carob;"></i>
                     </button>
                 </td>

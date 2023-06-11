@@ -3,9 +3,11 @@
 die(true)
 let range = 30;
 
+let allCities = null;
 let cities = null;
 let garages = null;
 let found = [];
+let sole = [];
 
 const tbody = document.querySelector("#preview");
 
@@ -46,6 +48,8 @@ async function getGarages()
 
 async function setup() 
 {
+    allCities = new ListCities()
+
     garages = await getGarages()
 
     cities = await getCities()
@@ -56,16 +60,19 @@ async function setup()
         let parts = Math.ceil(cities.length / range);
 
         const ul = document.querySelector("#pList");
+
+        cities.forEach((c) => 
+        {
+            const objC = new City(c.semel_yeshuv, c.name, 
+                c.english_name, c.shem_napa, c.shem_moaatza);
+
+            allCities.addCity(objC)
+        });
          
         found = []
         for(let i=1; i<range; i++)
-        {
-            const objC = 
-                new City(cities[i].semel_yeshuv, cities[i].name,
-                    cities[i].english_name, cities[i].shem_napa,
-                    cities[i].shem_moaatza);
-                    
-            available = garages.filter(g => g.yishuv==cities[i].name)             
+        {                    
+            available = garages.filter(g => g.yishuv==allCities.getCity(i).name)             
                     
             if(available.length)
             {   
@@ -74,11 +81,11 @@ async function setup()
                 
                 found.push(item)
                 //console.log(found)
-            }
-                            
-            tbody.innerHTML += (available.length) ? objC.createRow(i) : objC.createRow(0); 
+            }                            
+            tbody.innerHTML += (available.length) ? 
+                allCities.getCity(i).createRow(i,0) : 
+                allCities.getCity(i).createRow(0,0) ; 
         }
-
         for(let j=1; j<=parts; j++)
         {
             ul.innerHTML +=
@@ -105,39 +112,46 @@ function fillPart(No)
     
     found = []
     for(let i=start; i<fin; i++)
-    {
-        const objC = 
-            new City(cities[i].semel_yeshuv, cities[i].name,
-                cities[i].english_name, cities[i].shem_napa,
-                cities[i].shem_moaatza);
-                
-                available = garages.filter(g => g.yishuv==cities[i].name) 
-                    
-                if(available.length)
-                {                
-                    let item = {};
-                    item[i] = available;            
-                    
-                    found.push(item)
-                    //console.log(found)
-                }
-                                
-                tbody.innerHTML += (available.length) ? objC.createRow(i) : objC.createRow(0); 
+    { 
+        available = garages.filter(g => g.yishuv==allCities.getCity(i).name) 
+            
+        if(available.length)
+        {                
+            let item = {};
+            item[i] = available;            
+            
+            found.push(item)
+            //console.log(found)
+        }
+        tbody.innerHTML += (available.length) ? 
+            allCities.getCity(i).createRow(i,0) : 
+            allCities.getCity(i).createRow(0,0) ;
     }
 }
 
 function die(bool)
 {
+    document.querySelector("#srch").value= ""
+    document.querySelector("#srch").placeholder = "תכניס שם הישוב"
+
     if(bool) document.querySelector("#gCard").style.display = "none"; 
     else     document.querySelector("#gCard").style.display = "flex";   
 }
 
-function toGarages(keyGrgs)
+function toGarages(keyGrgs, n)
 {  
     die(false)
+    let listG = null
 
-    const item = found.find(f => f[keyGrgs])
-    const listG = item[keyGrgs]
+    if(!n)
+    {
+        const item = found.find(f => f[keyGrgs])
+        listG = item[keyGrgs]
+    }
+    else
+    {
+        listG = sole
+    }
 
     const ul = document.querySelector('#g');   
     ul.innerHTML = ""
@@ -148,19 +162,26 @@ function toGarages(keyGrgs)
             g.sug_mosah, g.ktovet, g.yishuv, g.telephone, g.mikud, g.cod_miktzoa,
             g.miktzoa, g.menahel_miktzoa, g.rasham_havarot);
 
-            ul.innerHTML += objG.createRow();       
+            ul.innerHTML += objG.createRow(n);       
     });
 }
 
-function details(id)
+function details(id, n)
 {
     let theGrg = null;
 
-    for(let f of found)
+    if(!n)
     {
-        let key = Object.keys(f);
-        theGrg = f[key].find(g=>g._id==id)
-        if(theGrg) break;
+        for(let f of found)
+        {
+            let key = Object.keys(f);
+            theGrg = f[key].find(g=>g._id==id)
+            if(theGrg) break;
+        }
+    }
+    else
+    {
+        theGrg = sole.find(g=>g._id==id)
     }
     //console.log(theGrg)
 
@@ -174,4 +195,39 @@ function details(id)
      <p>מקצוע: ${theGrg.miktzoa}, קוד המקצוע: ${theGrg.cod_miktzoa}</p>
      <p>מנהל מקצוע: ${theGrg.menahel_miktzoa}, רשם חברות: ${theGrg.rasham_havarot}</p>
     `
+}
+
+function search()
+{
+    let cName = document.querySelector('#srch').value.trim()
+
+    sole = [];
+
+    if(cName)
+    {
+        let theCity = null;
+        let index = 0;
+
+        for(index; index<allCities.getList().length; index++)
+        {
+            if(theCity = allCities.getCity(index).name==cName) 
+                break;
+        }
+
+        tbody.innerHTML = ""
+        if(theCity)
+        {
+            available = garages.filter(g => g.yishuv==allCities.getCity(index).name) 
+            
+            if(available.length)
+            {
+                available.forEach(g => sole.push(g))
+            }
+            console.log(sole)   
+            
+            tbody.innerHTML += (available.length) ? 
+                allCities.getCity(index).createRow(index,1) : 
+                allCities.getCity(index).createRow(0,0) ;
+        }
+    }
 }
