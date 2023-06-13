@@ -149,8 +149,6 @@ function fillRight(bNo)
 
         let from = block*(bNo-1)+1;
         let to = Math.min(block*bNo, pages);
-           
-    console.log(`bNo=${bNo}, from=${from}, to=${to}`)
 
         for(let j=from;  j<=to;  j++)
         {
@@ -206,8 +204,6 @@ function fillLeft(bNo)
 
         let from = block*(bNo-1)+1;
         let to = Math.min(block*bNo, pages);
-           
-    console.log(`bNo=${bNo}, from=${from}, to=${to}`)
 
         for(let j=from;  j<=to;  j++)
         {
