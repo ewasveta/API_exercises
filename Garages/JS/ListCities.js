@@ -17,7 +17,8 @@ class ListCities {
         this.cList = cities
     }
 
-    getList(){
+    getList()
+    {
         return this.cList
     }
 }

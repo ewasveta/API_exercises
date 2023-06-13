@@ -1,15 +1,18 @@
 //https://raw.githubusercontent.com/royts/israel-cities/master/israel-cities.json
 
 die(true)
-let range = 30;
+const range = 18;   //cities per display
+const block = 15;   //paginator chapter range
 
+let pages = 0;
 let allCities = null;
 let cities = null;
 let garages = null;
 let found = [];
-let sole = [];
+let mono = [];
 
 const tbody = document.querySelector("#preview");
+const ul = document.querySelector("#pList");
 
 async function getCities()
 {
@@ -57,10 +60,8 @@ async function setup()
     {
         cities.shift();
 
-        let parts = Math.ceil(cities.length / range);
-
-        const ul = document.querySelector("#pList");
-
+        pages = Math.ceil(cities.length / range);
+       
         cities.forEach((c) => 
         {
             const objC = new City(c.semel_yeshuv, c.name, 
@@ -69,8 +70,8 @@ async function setup()
             allCities.addCity(objC)
         });
          
-        found = []
-        for(let i=1; i<range; i++)
+        found = []        
+        for(let i=1; i<=range; i++)
         {                    
             available = garages.filter(g => g.yishuv==allCities.getCity(i).name)             
                     
@@ -80,24 +81,150 @@ async function setup()
                 item[i] = available;            
                 
                 found.push(item)
-                //console.log(found)
             }                            
             tbody.innerHTML += (available.length) ? 
                 allCities.getCity(i).createRow(i,0) : 
                 allCities.getCity(i).createRow(0,0) ; 
-        }
-        for(let j=1; j<=parts; j++)
+        }        
+        
+        ul.innerHTML += 
+        `<li class="page-item">
+            <a onclick="fillLeft(0)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
+                <i class="fa-solid fa-angles-left"></i>               
+            </a>
+        </li>`
+
+        for(let j=1; j<=block; j++)
         {
             ul.innerHTML +=
-            `
-                <li class="page-item">
-                    <a onclick="fillPart('${j}')" class="page-link text-warning-emphasis fw-bold" href="#">${j}</a>
-                </li>
-            `
-        }   
+            `<li class="page-item">
+                <a onclick="fillPart('${j}')" class="page-link text-warning-emphasis fw-bold bg-warning-subtle" href="#">${j}</a>
+             </li>`
+        }  
+
+        ul.innerHTML += 
+        `<li class="page-item">
+            <a onclick="fillRight(2)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </li>`
     }
 }  
 setup() 
+
+function fillRight(bNo)
+{
+    const chapters = Math.ceil(pages / block) 
+
+    if((bNo) <= chapters )
+    {
+        tbody.innerHTML = ""
+        ul.innerHTML = ""
+        found = [] 
+        let start = range * block * (bNo-1) 
+        let fin = Math.min((start+range), cities.length) 
+
+        for(let i=start; i<fin; i++)
+        {                    
+            available = garages.filter(g => g.yishuv==allCities.getCity(i).name)             
+                    
+            if(available.length)
+            {   
+                let item = {};
+                item[i] = available;            
+                
+                found.push(item)
+            }                            
+            tbody.innerHTML += (available.length) ? 
+                allCities.getCity(i).createRow(i,0) : 
+                allCities.getCity(i).createRow(0,0) ; 
+        }        
+        
+        ul.innerHTML += 
+        `<li class="page-item">
+            <a onclick="fillLeft(${bNo-1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
+                <i class="fa-solid fa-angles-left"></i>               
+            </a>
+        </li>`
+
+        let from = block*(bNo-1)+1;
+        let to = Math.min(block*bNo, pages);
+           
+    console.log(`bNo=${bNo}, from=${from}, to=${to}`)
+
+        for(let j=from;  j<=to;  j++)
+        {
+            ul.innerHTML +=
+            `<li class="page-item">
+                <a onclick="fillPart('${j}')" class="page-link text-warning-emphasis fw-bold bg-warning-subtle" href="#">${j}</a>
+             </li>`
+        }  
+
+        ul.innerHTML += 
+        `<li class="page-item">
+            <a onclick="fillRight(${bNo+1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </li>`
+    }  
+}
+
+function fillLeft(bNo)
+{
+    const chapters = Math.ceil(pages / block) 
+
+    if((bNo) > 0 )
+    {
+        tbody.innerHTML = ""
+        ul.innerHTML = ""
+        found = [] 
+        let start = Math.max( range*block*(bNo-1), 1 )
+        let fin = (start+range)
+
+        for(let i=start; i<fin; i++)
+        {                    
+            available = garages.filter(g => g.yishuv==allCities.getCity(i).name)             
+                    
+            if(available.length)
+            {   
+                let item = {};
+                item[i] = available;            
+                
+                found.push(item)
+            }                            
+            tbody.innerHTML += (available.length) ? 
+                allCities.getCity(i).createRow(i,0) : 
+                allCities.getCity(i).createRow(0,0) ; 
+        }        
+        
+        ul.innerHTML += 
+        `<li class="page-item">
+            <a onclick="fillLeft(${bNo-1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
+                <i class="fa-solid fa-angles-left"></i>               
+            </a>
+        </li>`
+
+        let from = block*(bNo-1)+1;
+        let to = Math.min(block*bNo, pages);
+           
+    console.log(`bNo=${bNo}, from=${from}, to=${to}`)
+
+        for(let j=from;  j<=to;  j++)
+        {
+            ul.innerHTML +=
+            `<li class="page-item">
+                <a onclick="fillPart('${j}')" class="page-link text-warning-emphasis fw-bold bg-warning-subtle" href="#">${j}</a>
+             </li>`
+        }  
+
+        ul.innerHTML += 
+        `<li class="page-item">
+            <a onclick="fillRight(${bNo+1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </li>`
+    }  
+}
 
 function fillPart(No)
 { 
@@ -106,11 +233,10 @@ function fillPart(No)
     let start = (No-1)*range
     let fin = Math.min((start+range), cities.length)
 
-    //console.log(`start=${start}, fin=${fin}`)
-
     tbody.innerHTML = ""
     
     found = []
+
     for(let i=start; i<fin; i++)
     { 
         available = garages.filter(g => g.yishuv==allCities.getCity(i).name) 
@@ -121,7 +247,6 @@ function fillPart(No)
             item[i] = available;            
             
             found.push(item)
-            //console.log(found)
         }
         tbody.innerHTML += (available.length) ? 
             allCities.getCity(i).createRow(i,0) : 
@@ -150,7 +275,7 @@ function toGarages(keyGrgs, n)
     }
     else
     {
-        listG = sole
+        listG = mono
     }
 
     const ul = document.querySelector('#g');   
@@ -181,9 +306,8 @@ function details(id, n)
     }
     else
     {
-        theGrg = sole.find(g=>g._id==id)
+        theGrg = mono.find(g=>g._id==id)
     }
-    //console.log(theGrg)
 
     document.querySelector('#modalLabel').innerText = 
     `מוסך: ${theGrg.shem_mosah}, מס': ${theGrg.mispar_mosah}`
@@ -201,7 +325,7 @@ function search()
 {
     let cName = document.querySelector('#srch').value.trim()
 
-    sole = [];
+    mono = [];
 
     if(cName)
     {
@@ -221,10 +345,8 @@ function search()
             
             if(available.length)
             {
-                available.forEach(g => sole.push(g))
-            }
-            //console.log(sole)   
-            
+                available.forEach(g => mono.push(g))
+            } 
             tbody.innerHTML += (available.length) ? 
                 allCities.getCity(index).createRow(index,1) : 
                 allCities.getCity(index).createRow(0,0) ;
