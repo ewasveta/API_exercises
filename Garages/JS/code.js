@@ -5,6 +5,7 @@ const range = 18;   //cities per display
 const block = 15;   //paginator chapter range
 
 let pages = 0;
+let chapters = 0;
 let allCities = null;
 let cities = null;
 let garages = null;
@@ -60,7 +61,8 @@ async function setup()
     {
         cities.shift();
 
-        pages = Math.ceil(cities.length / range);
+        pages = Math.ceil(cities.length / range);        
+        chapters = Math.ceil(pages / block);
        
         cities.forEach((c) => 
         {
@@ -114,7 +116,7 @@ setup()
 
 function fillRight(bNo)
 {
-    const chapters = Math.ceil(pages / block) 
+    die(true);
 
     if((bNo) <= chapters )
     {
@@ -169,7 +171,7 @@ function fillRight(bNo)
 
 function fillLeft(bNo)
 {
-    const chapters = Math.ceil(pages / block) 
+    die(true);
 
     if((bNo) > 0 )
     {
