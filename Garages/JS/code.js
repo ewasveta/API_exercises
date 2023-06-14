@@ -91,7 +91,7 @@ async function setup()
         
         ul.innerHTML += 
         `<li class="page-item">
-            <a onclick="fillLeft(0)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
+            <a onclick="fillJump(0,false)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
                 <i class="fa-solid fa-angles-left"></i>               
             </a>
         </li>`
@@ -106,7 +106,7 @@ async function setup()
 
         ul.innerHTML += 
         `<li class="page-item">
-            <a onclick="fillRight(2)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
+            <a onclick="fillJump(2,true)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
                 <i class="fa-solid fa-angles-right"></i>
             </a>
         </li>`
@@ -114,17 +114,26 @@ async function setup()
 }  
 setup() 
 
-function fillRight(bNo)
+function fillJump(bNo, direction)
 {
     die(true);
 
-    if((bNo) <= chapters )
+    if(bNo <= chapters  &&  bNo > 0)
     {
         tbody.innerHTML = ""
         ul.innerHTML = ""
         found = [] 
-        let start = range * block * (bNo-1) 
-        let fin = Math.min((start+range), cities.length) 
+        let start = 0, fin = 0;        
+        if(direction)
+        {
+            start = range * block * (bNo-1) 
+            fin = Math.min((start+range), cities.length) 
+        }
+        else
+        {
+            start = Math.max( range*block*(bNo-1), 1 )
+           fin = (start+range)
+        }
 
         for(let i=start; i<fin; i++)
         {                    
@@ -144,7 +153,7 @@ function fillRight(bNo)
         
         ul.innerHTML += 
         `<li class="page-item">
-            <a onclick="fillLeft(${bNo-1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
+            <a onclick="fillJump(${bNo-1}, false)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
                 <i class="fa-solid fa-angles-left"></i>               
             </a>
         </li>`
@@ -162,66 +171,11 @@ function fillRight(bNo)
 
         ul.innerHTML += 
         `<li class="page-item">
-            <a onclick="fillRight(${bNo+1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
+            <a onclick="fillJump(${bNo+1}, true)" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
                 <i class="fa-solid fa-angles-right"></i>
             </a>
         </li>`
-    }  
-}
-
-function fillLeft(bNo)
-{
-    die(true);
-
-    if((bNo) > 0 )
-    {
-        tbody.innerHTML = ""
-        ul.innerHTML = ""
-        found = [] 
-        let start = Math.max( range*block*(bNo-1), 1 )
-        let fin = (start+range)
-
-        for(let i=start; i<fin; i++)
-        {                    
-            available = garages.filter(g => g.yishuv==allCities.getCity(i).name)             
-                    
-            if(available.length)
-            {   
-                let item = {};
-                item[i] = available;            
-                
-                found.push(item)
-            }                            
-            tbody.innerHTML += (available.length) ? 
-                allCities.getCity(i).createRow(i,0) : 
-                allCities.getCity(i).createRow(0,0) ; 
-        }        
-        
-        ul.innerHTML += 
-        `<li class="page-item">
-            <a onclick="fillLeft(${bNo-1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Previous">
-                <i class="fa-solid fa-angles-left"></i>               
-            </a>
-        </li>`
-
-        let from = block*(bNo-1)+1;
-        let to = Math.min(block*bNo, pages);
-
-        for(let j=from;  j<=to;  j++)
-        {
-            ul.innerHTML +=
-            `<li class="page-item">
-                <a onclick="fillPart('${j}')" class="page-link text-warning-emphasis fw-bold bg-warning-subtle" href="#">${j}</a>
-             </li>`
-        }  
-
-        ul.innerHTML += 
-        `<li class="page-item">
-            <a onclick="fillRight(${bNo+1})" class="page-link text-warning-emphasis fw-bold  bg-warning-subtle" href="#" aria-label="Next">
-                <i class="fa-solid fa-angles-right"></i>
-            </a>
-        </li>`
-    }  
+    }   
 }
 
 function fillPart(No)
@@ -321,12 +275,13 @@ function details(id, n)
 
 function search()
 {
-    let cName = document.querySelector('#srch').value.trim()
-
     mono = [];
-
+    
+    let cName = document.querySelector('#srch').value.trim()   
     if(cName)
     {
+        document.querySelector("#gCard").style.display = "none"; 
+
         let theCity = null;
         let index = 0;
 
@@ -335,7 +290,6 @@ function search()
             if(theCity = allCities.getCity(index).name==cName) 
                 break;
         }
-
         tbody.innerHTML = ""
         if(theCity)
         {
